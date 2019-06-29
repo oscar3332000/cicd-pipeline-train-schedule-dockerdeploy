@@ -55,13 +55,14 @@ pipeline {
                 milestone(1)
                 echo "Deploying project to production"
                 withCredentials([usernamePassword(credentialsId: 'webserver_login', passwordVariable: 'USERPASS', usernameVariable: 'USERNAME')]) {
-                
-                def remote = [:]
-                remote.name = 'production'
-                remote.host = '$prod_ip'
-                remote.user = '$USERNAME'
-                remote.password = '$USERPASS'
-                remote.allowAnyHosts = true
+                    script {
+                        def remote = [:]
+                        remote.name = 'production'
+                        remote.host = '$prod_ip'
+                        remote.user = '$USERNAME'
+                        remote.password = '$USERPASS'
+                        remote.allowAnyHosts = true
+                    }
                     
                     sshCommand remote: remote, command: "docker pull oscar3332000/train-schedule:${env.BUILD_NUMBER}"
                     sshCommand remote: remote, command: "docker stop oscar3332000/train-schedule"
